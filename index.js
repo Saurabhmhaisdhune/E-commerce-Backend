@@ -40,7 +40,7 @@ app.get('/data', async function(request,response){
 app.post('/data/insert', async function (request, response) {
   const data = request.body;
   const result=await client.db("webshop").collection("product").insertOne(data);
- request.send(result);
+ response.send(result);
 });
 
 // To check the list of all user register so far
