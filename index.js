@@ -38,7 +38,7 @@ app.get('/data', async function(request,response){
 //Television
 
 app.get('/data/television', async function(request,response){
-  const data= await client.db("webshop").collection('product').find({category:television}).toArray();
+  const data= await client.db("webshop").collection('product').find({category:"television"}).toArray();
   response.send(data)
 })
 
