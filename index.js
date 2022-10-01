@@ -23,7 +23,7 @@ async function createConnection() {
 
 const client = await createConnection();
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 app.get('/', function (request, response) {
@@ -34,6 +34,14 @@ app.get('/data', async function(request,response){
   const data= await client.db("webshop").collection('product').find({}).toArray();
   response.send(data)
 })
+
+//To insert data
+
+app.post('/data', async function (request, response) {
+  const data = request.body;
+  const result=await client.db("webshop").collection("product").insertOne(data);
+ request.send(result);
+});
 
 // To check the list of all user register so far
 
