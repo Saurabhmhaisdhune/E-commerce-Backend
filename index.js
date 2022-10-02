@@ -40,7 +40,56 @@ app.get('/data', async function(request,response){
 app.get('/data/television', async function(request,response){
   const data= await client.db("webshop").collection('product').find({category:"Television"}).toArray();
   response.send(data)
-})
+});
+
+//Mobile Phone
+
+app.get('/data/television', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Mobile Phone"}).toArray();
+  response.send(data)
+});
+
+//Bike
+
+app.get('/data/bike', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Bike"}).toArray();
+  response.send(data)
+});
+
+//Clothe
+
+app.get('/data/clothe', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Clothe"}).toArray();
+  response.send(data)
+});
+
+//Furniture
+
+app.get('/data/furniture', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Furniture"}).toArray();
+  response.send(data)
+});
+
+//Laptop
+
+app.get('/data/laptop', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Laptop"}).toArray();
+  response.send(data)
+});
+
+//Music
+
+app.get('/data/music', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Music"}).toArray();
+  response.send(data)
+});
+
+//Sport
+
+app.get('/data/sport', async function(request,response){
+  const data= await client.db("webshop").collection('product').find({category:"Sport"}).toArray();
+  response.send(data)
+});
 
 //To insert data
 
