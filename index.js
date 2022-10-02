@@ -44,7 +44,7 @@ app.get('/data/television', async function(request,response){
 
 //Mobile Phone
 
-app.get('/data/television', async function(request,response){
+app.get('/data/mobile', async function(request,response){
   const data= await client.db("webshop").collection('product').find({category:"Mobile Phone"}).toArray();
   response.send(data)
 });
