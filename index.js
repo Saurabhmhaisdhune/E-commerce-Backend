@@ -48,6 +48,21 @@ app.post('/data/carts/post', async function(request,response){
   response.send(result);
 });
 
+app.delete("/data/carts/:id", async function (request, response) {
+
+  const { id }=request.params;
+  console.log(request.params, id);
+
+  const result=await client
+  .db("webshop")
+  .collection("carts")
+  .deleteOne({ id : id });
+
+  result.deletedCount > 0
+  ?response.send({msg:"Item successfully deleted"})
+  :response.status(401).send({msg:"Item not found"});
+});
+
 //Television
 
 app.get('/data/television', async function(request,response){
