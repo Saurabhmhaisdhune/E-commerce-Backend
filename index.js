@@ -48,7 +48,7 @@ app.post('/data/carts/post', async function(request,response){
   response.send(result);
 });
 
-app.delete("/data/carts/:id", async function (request, response) {
+app.delete("/data/carts/delete/:id", async function (request, response) {
 
   const { id }=request.params;
   console.log(request.params, id);
