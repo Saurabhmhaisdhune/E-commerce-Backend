@@ -35,6 +35,19 @@ app.get('/data', async function(request,response){
   response.send(data)
 });
 
+//Cart data
+
+app.get('/data/carts', async function(request,response){
+  const data= await client.db("webshop").collection('carts').find({}).toArray();
+  response.send(data)
+});
+
+app.post('/data/carts/post', async function(request,response){
+  const data = request.body;
+  const result = await client.db("webshop").collection("carts").insertOne(data);
+  response.send(result);
+});
+
 //Television
 
 app.get('/data/television', async function(request,response){
@@ -106,7 +119,7 @@ app.get('/users/registers', async function (request, response) {
  response.send(data)
 });
 
-// For Registeration of new user
+// For Registration of new user
 
 app.post('/users/register', async function (request, response) {
   const {usernames, passwords} = request.body; 
