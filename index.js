@@ -6,9 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import Stripe from "stripe";
-const stripe = new Stripe(
-  "pk_test_51LqakBSH7Xqmg7Ie8E21At96WXXfoAAQQtwoH2dkGvQRj9Hj0OL5yXIFr7gxw5J5eCF26hYW3RnvQfg8L7TRxfw000TS2wA5gA"
-);
+const stripe = new Stripe(process.env.STRIPE_KEY);
 
 dotenv.config();
 
@@ -37,22 +35,23 @@ app.get("/payment", function (request, response) {
   response.send("payment");
 });
 
-app.post("/payment/post",(req,res)=>{
+app.post("/payment/post",async (req, res) => {
+
   const {product, token}=req.body;
   console.log("product", product);
   console.log("PRICE",product.price);
   const idempotencyKey = uuid()
 
-  return stripe.customers.create({
+ stripe.customers.create({
     email:token.email,
     source: token.id
   }).then(customer=>{
-    stripe.charges.create({
+    return stripe.charges.create({
       amount:product.price*100,
-      currency:'inr',
+      currency:'usd',
       customer:customer.id,
       receipt_email:token.email,
-      description:`purchase of product`,
+      description:'purchase of product',
       shipping:{
         name:token.card.name,
         address:{
