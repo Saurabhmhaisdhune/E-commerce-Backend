@@ -13,9 +13,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-// const MONGO_URL = "mongodb://127.0.0.1";
+const MONGO_URL = "mongodb://127.0.0.1";
 
-const MONGO_URL= process.env.MONGO_URL;
+// const MONGO_URL= process.env.MONGO_URL;
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
@@ -35,33 +35,38 @@ app.get("/payment", function (request, response) {
   response.send("payment");
 });
 
-app.post("/payment/post",async (req, res) => {
-
-  const {product, token}=req.body;
+app.post("/payment/post", async (req, res) => {
+  const { product, token } = req.body;
   console.log("product", product);
-  console.log("PRICE",product.price);
-  const idempotencyKey = uuid()
+  console.log("PRICE", product.price);
+  const idempotencyKey = uuid();
 
- stripe.customers.create({
-    email:token.email,
-    source: token.id
-  }).then(customer=>{
-    return stripe.charges.create({
-      amount:product.price*100,
-      currency:'usd',
-      customer:customer.id,
-      receipt_email:token.email,
-      description:'purchase of product',
-      shipping:{
-        name:token.card.name,
-        address:{
-          country:token.card.address_country
-        }
-      }
-    },{idempotencyKey})
-  }).then(result=>res.status(200).json(result))
-  .catch(err=>console.log(err))
-})
+  stripe.customers
+    .create({
+      email: token.email,
+      source: token.id,
+    })
+    .then((customer) => {
+      return stripe.charges.create(
+        {
+          amount: product.price * 100,
+          currency: "usd",
+          customer: customer.id,
+          receipt_email: token.email,
+          description: "purchase of product",
+          shipping: {
+            name: token.card.name,
+            address: {
+              country: token.card.address_country,
+            },
+          },
+        },
+        { idempotencyKey }
+      );
+    })
+    .then((result) => res.status(200).json(result))
+    .catch((err) => console.log(err));
+});
 
 //Welcome message
 
@@ -95,6 +100,17 @@ app.post("/data/carts/post", async function (request, response) {
   const data = request.body;
   const result = await client.db("webshop").collection("carts").insertOne(data);
   response.send(result);
+});
+
+//Index value in cart collection
+
+app.get("/data/index", async function (request, response) {
+  const data = client
+    .db("webshop")
+    .collection("carts")
+    .aggregate([{ $group: {_id:"price",totalprice: { $sum: "$price" } } }])
+    .toArray();
+  response.send(data);
 });
 
 app.delete("/data/carts/delete/:id", async function (request, response) {
