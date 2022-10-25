@@ -50,7 +50,7 @@ app.post("/payment/post", async (req, res) => {
       return stripe.charges.create(
         {
           amount: product.price * 100,
-          currency: "usd",
+          currency: "inr",
           customer: customer.id,
           receipt_email: token.email,
           description: "purchase of product",
